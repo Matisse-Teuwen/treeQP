@@ -528,7 +528,8 @@ void stage_qp_qpoases_export_mu(tree_qp_out *qp_out, int idx, void *work_)
 
     QProblemB *QPB = qpoases_data->QPB;
     QProblem *QP = qpoases_data->QP;
-
+    assert(QP == NULL || QP->y != NULL);
+    assert(QPB == NULL || QPB->y != NULL);
     int nx = qp_out->x[idx].m;
     int nu = qp_out->u[idx].m;
     int nc = 0;
