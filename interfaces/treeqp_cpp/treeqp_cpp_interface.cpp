@@ -166,7 +166,10 @@ void TdunesSolver::CreateOptions()
     OptsMem = malloc(size);
     treeqp_tdunes_opts_create(NumNodes, &TdunesOpts, OptsMem);
     treeqp_tdunes_opts_set_default(NumNodes, &TdunesOpts);
-    treeqp_tdunes_opts_set_qp_solver(NumNodes, &TdunesOpts, TREEQP_QPOASES_SOLVER);
+    for (int ii = 0; ii < NumNodes; ii++)
+    {
+        TdunesOpts.qp_solver[ii] = TREEQP_QPOASES_SOLVER;
+    }
 }
 
 
