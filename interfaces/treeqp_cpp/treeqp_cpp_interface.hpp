@@ -98,8 +98,6 @@ public:
 
     int Solve(struct TreeQp *Qp) override;
 
-private:
-
     treeqp_tdunes_opts_t TdunesOpts;
 
     treeqp_tdunes_workspace TdunesWork;
