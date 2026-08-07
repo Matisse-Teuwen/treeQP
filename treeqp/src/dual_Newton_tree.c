@@ -1418,7 +1418,7 @@ void treeqp_tdunes_create(const tree_qp_in *qp_in, const treeqp_tdunes_opts_t *o
     int regDim = maximum_hessian_block_dimension(qp_in);
     int dim, idxkid, ncolAB;
     int rowsM, colsM;
-    printf("Creating workspace for treeQP solver with %d nodes, %d parent nodes, and %d stages\n", Nn, Np, Nh);
+    // printf("Creating workspace for treeQP solver with %d nodes, %d parent nodes, and %d stages\n", Nn, Np, Nh);
 
     // save some useful dimensions to workspace
     work->Nn = Nn;

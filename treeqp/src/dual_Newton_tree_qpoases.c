@@ -525,23 +525,23 @@ void stage_qp_qpoases_eval_dual_term(const tree_qp_in *qp_in, int idx, void *wor
 
 void stage_qp_qpoases_export_mu(tree_qp_out *qp_out, int idx, void *work_)
 {
-    printf("Exporting mu for stage %d\n", idx);
+    // printf("Exporting mu for stage %d\n", idx);
    
     treeqp_tdunes_workspace *work = work_;
     treeqp_tdunes_qpoases_data *qpoases_data = work->stage_qp_data[idx];
-    printf("qpoases_data->QPB =\n");
+    // printf("qpoases_data->QPB =\n");
     QProblemB *QPB = qpoases_data->QPB;
     QProblem *QP = qpoases_data->QP;
     // assert(QP == NULL || QP->y != NULL);
     // assert(QPB == NULL || QPB->y != NULL);
-    printf("QPB=%p QP=%p\n", (void*)QPB, (void*)QP);
+        // printf("QPB=%p QP=%p\n", (void*)QPB, (void*)QP);
 
-    if (QP)
-        printf("QP->y=%p\n", (void*)QP->y); 
+    // if (QP)
+    //     printf("QP->y=%p\n", (void*)QP->y); 
     int nx = qp_out->x[idx].m;
     int nu = qp_out->u[idx].m;
     int nc = 0;
-    printf("nx=%d nu=%d\n", nx, nu);
+            // printf("nx=%d nu=%d\n", nx, nu);
     if (QPB != NULL)
     {
         blasfeo_pack_dvec(nx, &QPB->y[0], &qp_out->mu_x[idx], 0);
@@ -554,7 +554,7 @@ void stage_qp_qpoases_export_mu(tree_qp_out *qp_out, int idx, void *work_)
         blasfeo_pack_dvec(nu, &QP->y[nx], &qp_out->mu_u[idx], 0);
         blasfeo_pack_dvec(nc, &QP->y[nx+nu], &qp_out->mu_d[idx], 0);
     }
-    printf("Exported mu for stage %d\n", idx);
+    // printf("Exported mu for stage %d\n", idx);
     
     // TODO(dimitris): have same convention as qpOASES instead of flipping sign here (probably change convention on KKT residuals)
     for (int ii = 0; ii < nx; ii++)
@@ -573,5 +573,5 @@ void stage_qp_qpoases_export_mu(tree_qp_out *qp_out, int idx, void *work_)
             BLASFEO_DVECEL(&qp_out->mu_d[idx], ii) = - BLASFEO_DVECEL(&qp_out->mu_d[idx], ii);
         }
     }
-    printf("Changed sign mu for stage %d\n", idx);
+    // printf("Changed sign mu for stage %d\n", idx);
 }
