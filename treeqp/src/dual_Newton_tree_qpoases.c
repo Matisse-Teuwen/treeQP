@@ -140,11 +140,13 @@ void stage_qp_qpoases_assign_data(int nx, int nu, int nc, void *stage_qp_data, c
     {   // QProblem
         QProblem_assignMemory(nvd, ngd, (QProblem **) &(qpoases_data->QP), *c_double_ptr);
         *c_double_ptr += QProblem_calculateMemorySize(nvd, ngd);
+        qpoases_data->QPB =NULL;
     }
     else
     {   // QProblemB
         QProblemB_assignMemory(nvd, (QProblemB **) &(qpoases_data->QPB), *c_double_ptr);
         *c_double_ptr += QProblemB_calculateMemorySize(nvd);
+        qpoases_data->QP = NULL;
     }
 }
 
