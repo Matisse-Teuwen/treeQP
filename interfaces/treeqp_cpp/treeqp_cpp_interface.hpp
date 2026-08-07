@@ -163,7 +163,6 @@ public:
 
     void PrintOutput(int NumNodes);
 
-private:
 
     int NumNodes;
 
