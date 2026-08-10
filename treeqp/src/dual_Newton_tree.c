@@ -1017,7 +1017,7 @@ static return_t line_search(const tree_qp_in *qp_in, const treeqp_tdunes_opts_t 
     // printf(" dual_function = %f\n", fval);
 
     work->lsIter = lsIter;
-    std::cout << "[TREEQP] Line search iterations: " << lsIter <<"tau: " << tau << std::endl;
+    printf("[TREEQP] Line search iterations: %d, tau: %f\n", lsIter, tau);
     return TREEQP_OK;
 }
 
