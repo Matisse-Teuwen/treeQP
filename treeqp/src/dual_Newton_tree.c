@@ -1124,7 +1124,56 @@ static return_t treeqp_tdunes_validate_opts(const treeqp_tdunes_opts_t *opts)
 }
 
 
+static double residual_inf_norm(
+    const treeqp_tdunes_workspace *work)
+{
+    double norm = 0.0;
 
+    for (int block = 0; block < work->Np; ++block)
+    {
+        const struct blasfeo_dvec *residual =
+            &work->sres[block];
+
+        for (int index = 0;
+             index < residual->m;
+             ++index)
+        {
+            const double value = fabs(
+                BLASFEO_DVECEL(residual, index));
+
+            if (value > norm)
+                norm = value;
+        }
+    }
+
+    return norm;
+}
+
+
+static double delta_lambda_inf_norm(
+    const treeqp_tdunes_workspace *work)
+{
+    double norm = 0.0;
+
+    for (int block = 0; block < work->Np; ++block)
+    {
+        const struct blasfeo_dvec *step =
+            &work->sDeltalambda[block];
+
+        for (int index = 0;
+             index < step->m;
+             ++index)
+        {
+            const double value = fabs(
+                BLASFEO_DVECEL(step, index));
+
+            if (value > norm)
+                norm = value;
+        }
+    }
+
+    return norm;
+}
 return_t treeqp_tdunes_solve(const tree_qp_in *qp_in, tree_qp_out *qp_out,
     const treeqp_tdunes_opts_t *opts, treeqp_tdunes_workspace *work)
 {
@@ -1225,6 +1274,25 @@ return_t treeqp_tdunes_solve(const tree_qp_in *qp_in, tree_qp_out *qp_out,
         treeqp_tic(&op_tmr);
         #endif
         calculate_delta_lambda(qp_in, idxFactorStart, work, opts);
+        double residual_norm =
+            residual_inf_norm(work);
+
+        calculate_delta_lambda(
+            qp_in,
+            idxFactorStart,
+            work,
+            opts);
+
+        double step_norm =
+            delta_lambda_inf_norm(work);
+
+        printf(
+            "[TREEQP] Newton %d | "
+            "||r||inf = %.17e | "
+            "||dlambda||inf = %.17e\n",
+            NewtonIter,
+            residual_norm,
+            step_norm);
         #if PROFILE > 2
         timings->newton_direction_times[NewtonIter] = treeqp_toc(&op_tmr);
         #endif
