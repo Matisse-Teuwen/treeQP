@@ -347,6 +347,7 @@ static void compare_with_previous_active_set(int isLeaf, int indx, treeqp_tdunes
         if (BLASFEO_DVECEL(sxas, ii) != BLASFEO_DVECEL(sxasPrev, ii))
         {
             xasChanged[indx] = 1;
+            printf("[TREEQP] Active set for state variables changed at stage %d\n", indx);
             break;
         }
     }
@@ -360,6 +361,7 @@ static void compare_with_previous_active_set(int isLeaf, int indx, treeqp_tdunes
             if (BLASFEO_DVECEL(suas, ii) != BLASFEO_DVECEL(suasPrev, ii))
             {
                 uasChanged[indx] = 1;
+                printf("[TREEQP] Active set for control variables changed at stage %d\n", indx);
                 break;
             }
         }
@@ -1015,7 +1017,7 @@ static return_t line_search(const tree_qp_in *qp_in, const treeqp_tdunes_opts_t 
     // printf(" dual_function = %f\n", fval);
 
     work->lsIter = lsIter;
-
+    std::cout << "[TREEQP] Line search iterations: " << lsIter <<"tau: " << tau << std::endl;
     return TREEQP_OK;
 }
 
