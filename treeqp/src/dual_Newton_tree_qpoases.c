@@ -281,7 +281,7 @@ return_t stage_qp_qpoases_init(const tree_qp_in *qp_in, int idx, stage_qp_t solv
         QP = NULL;
 
         QProblemBCON(QPB, nx+nu, HST_POSDEF);
-        QProblemB_setPrintLevel(QPB, PL_MEDIUM);  // TODO(dimitris): other options?
+        QProblemB_setPrintLevel(QPB, PL_TABULAR);  // TODO(dimitris): other options?
         QProblemB_printProperties(QPB);  // TODO(dimitris): what is this for?
 
         status = QProblemB_init(QPB, qpoases_data->H, qpoases_data->g, qpoases_data->lb,
@@ -292,7 +292,7 @@ return_t stage_qp_qpoases_init(const tree_qp_in *qp_in, int idx, stage_qp_t solv
         QPB = NULL;
 
         QProblemCON(QP, nx+nu, nc, HST_POSDEF);
-        QProblem_setPrintLevel(QP, PL_MEDIUM);  // TODO(dimitris): other options?
+        QProblem_setPrintLevel(QP, PL_TABULAR);  // TODO(dimitris): other options?
         QProblem_printProperties(QP);  // TODO(dimitris): what is this for?
 
         status = QProblem_init(QP, qpoases_data->H, qpoases_data->g, qpoases_data->C, qpoases_data->lb,
