@@ -540,6 +540,7 @@ static return_t build_dual_problem(const tree_qp_in *qp_in, int *idxFactorStart,
 
     // Check termination condition
     error = calculate_error_in_residuals(opts->termCondition, work);
+    printf("[TREEQP] Iteration %d, error = %2.3e\n", work->iter, error);
     if (error < opts->stationarityTolerance)
     {
         return TREEQP_OPTIMAL_SOLUTION_FOUND;
