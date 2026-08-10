@@ -354,6 +354,15 @@ static int QProblem_solve(const tree_qp_in *qp_in, int idx, treeqp_tdunes_worksp
     //     printf("\n[TREEQP]: Error! qpOASES failed to solve stage QP (status = %d)\n\n", status);
     //     exit(1);
     // }
+
+    printf(
+        "[TREEQP] Stage %d | status=%d | "
+        "nWSR=%d | cpu=%.9e\n",
+        idx,
+        status,
+        nWSR,
+        cputime);
+ 
     return status;
 }
 
