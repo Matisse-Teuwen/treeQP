@@ -1273,7 +1273,7 @@ return_t treeqp_tdunes_solve(const tree_qp_in *qp_in, tree_qp_out *qp_out,
         #if PROFILE > 2
         treeqp_tic(&op_tmr);
         #endif
-        calculate_delta_lambda(qp_in, idxFactorStart, work, opts);
+        // calculate_delta_lambda(qp_in, idxFactorStart, work, opts);
         double residual_norm =
             residual_inf_norm(work);
 
