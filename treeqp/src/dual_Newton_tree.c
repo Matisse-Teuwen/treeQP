@@ -946,26 +946,8 @@ static return_t line_search(const tree_qp_in *qp_in, const treeqp_tdunes_opts_t 
 
     dot_product = gradient_trans_times_direction(work);
     status = evaluate_dual_function(qp_in, work, &fval0);
-    double armijo_rhs =
-        fval0
-        + opts->lineSearchGamma
-        * tau
-        * dot_product;
-
-    printf(
-        "[TREEQP] LS %d | "
-        "tau %.17e | "
-        "fval %.17e | "
-        "rhs %.17e | "
-        "fval-rhs %+.17e | "
-        "gTd %.17e\n",
-        lsIter,
-        tau,
-        fval,
-        armijo_rhs,
-        fval - armijo_rhs,
-        dot_product
-    );    
+    
+  
     if (status != TREEQP_OK) return status;
 
     // printf("dot_product = %f\n", dot_product);
@@ -991,6 +973,25 @@ static return_t line_search(const tree_qp_in *qp_in, const treeqp_tdunes_opts_t 
         }
         // evaluate dual function
         status = evaluate_dual_function(qp_in, work, &fval);
+        double armijo_rhs =
+            fval0
+            + opts->lineSearchGamma
+            * tau
+            * dot_product;
+        printf(
+            "[TREEQP] LS %d | "
+            "tau %.17e | "
+            "fval %.17e | "
+            "rhs %.17e | "
+            "fval-rhs %+.17e | "
+            "gTd %.17e\n",
+            lsIter,
+            tau,
+            fval,
+            armijo_rhs,
+            fval - armijo_rhs,
+            dot_product
+        );  
         if (status != TREEQP_OK) return status;
 
         if (work->lineSearchRestartCounter == opts->lineSearchRestartTrigger)
