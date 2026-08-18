@@ -347,7 +347,9 @@ static void compare_with_previous_active_set(int isLeaf, int indx, treeqp_tdunes
         if (BLASFEO_DVECEL(sxas, ii) != BLASFEO_DVECEL(sxasPrev, ii))
         {
             xasChanged[indx] = 1;
+            #if PRINT_LEVEL > 2
             printf("[TREEQP] Active set for state variables changed at stage %d\n", indx);
+            #endif
             break;
         }
     }
@@ -361,7 +363,9 @@ static void compare_with_previous_active_set(int isLeaf, int indx, treeqp_tdunes
             if (BLASFEO_DVECEL(suas, ii) != BLASFEO_DVECEL(suasPrev, ii))
             {
                 uasChanged[indx] = 1;
+                #if PRINT_LEVEL > 2
                 printf("[TREEQP] Active set for control variables changed at stage %d\n", indx);
+                #endif
                 break;
             }
         }
@@ -542,7 +546,9 @@ static return_t build_dual_problem(const tree_qp_in *qp_in, int *idxFactorStart,
 
     // Check termination condition
     error = calculate_error_in_residuals(opts->termCondition, work);
+    #if PRINT_LEVEL > 1
     printf("[TREEQP] Iteration %d, error = %2.3e\n", work->lsIter, error);
+    #endif
     if (error < opts->stationarityTolerance)
     {
         return TREEQP_OPTIMAL_SOLUTION_FOUND;
@@ -973,6 +979,7 @@ static return_t line_search(const tree_qp_in *qp_in, const treeqp_tdunes_opts_t 
         }
         // evaluate dual function
         status = evaluate_dual_function(qp_in, work, &fval);
+        #if PRINT_LEVEL > 2
         double armijo_rhs =
             fval0
             + opts->lineSearchGamma
@@ -991,12 +998,15 @@ static return_t line_search(const tree_qp_in *qp_in, const treeqp_tdunes_opts_t 
             armijo_rhs,
             fval - armijo_rhs,
             dot_product
-        );  
+        );
+        #endif
         if (status != TREEQP_OK) return status;
 
         if (work->lineSearchRestartCounter == opts->lineSearchRestartTrigger)
         {
+            #if PRINT_LEVEL > 1
             printf("PERFORMING FULL STEP TO RESTART\n");
+            #endif
             break;  // perform a full step when stuck
         }
 
@@ -1038,7 +1048,9 @@ static return_t line_search(const tree_qp_in *qp_in, const treeqp_tdunes_opts_t 
     // printf(" dual_function = %f\n", fval);
 
     work->lsIter = lsIter;
+    #if PRINT_LEVEL > 1
     printf("[TREEQP] Line search iterations: %d, tau: %f\n", lsIter, tau);
+    #endif
     return TREEQP_OK;
 }
 
@@ -1274,14 +1286,15 @@ return_t treeqp_tdunes_solve(const tree_qp_in *qp_in, tree_qp_out *qp_out,
         treeqp_tic(&op_tmr);
         #endif
         // calculate_delta_lambda(qp_in, idxFactorStart, work, opts);
-        double residual_norm =
-            residual_inf_norm(work);
-
         calculate_delta_lambda(
             qp_in,
             idxFactorStart,
             work,
             opts);
+
+        #if PRINT_LEVEL > 1
+        double residual_norm =
+            residual_inf_norm(work);
 
         double step_norm =
             delta_lambda_inf_norm(work);
@@ -1293,6 +1306,7 @@ return_t treeqp_tdunes_solve(const tree_qp_in *qp_in, tree_qp_out *qp_out,
             NewtonIter,
             residual_norm,
             step_norm);
+        #endif
         #if PROFILE > 2
         timings->newton_direction_times[NewtonIter] = treeqp_toc(&op_tmr);
         #endif

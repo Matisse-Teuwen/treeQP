@@ -253,12 +253,11 @@ return_t stage_qp_qpoases_init(const tree_qp_in *qp_in, int idx, stage_qp_t solv
     blasfeo_unpack_dvec(nx, &qp_in->xmax[idx], 0, &qpoases_data->ub[0]);
     blasfeo_unpack_dvec(nu, &qp_in->umax[idx], 0, &qpoases_data->ub[nx]);
 
-    struct blasfeo_dmat *sA = &qp_in->A[idx-1];
-    struct blasfeo_dmat *sB = &qp_in->B[idx-1];
-    struct blasfeo_dmat *sAB = &work->sAB[idx-1];
-
     if (idx > 0)
     {
+        struct blasfeo_dmat *sA = &qp_in->A[idx-1];
+        struct blasfeo_dmat *sB = &qp_in->B[idx-1];
+        struct blasfeo_dmat *sAB = &work->sAB[idx-1];
         blasfeo_dgecp(nx, sA->n, sA, 0, 0, sAB, 0, 0);
         blasfeo_dgecp(nx, sB->n, sB, 0, 0, sAB, 0, sA->n);
     }
@@ -281,8 +280,7 @@ return_t stage_qp_qpoases_init(const tree_qp_in *qp_in, int idx, stage_qp_t solv
         QP = NULL;
 
         QProblemBCON(QPB, nx+nu, HST_POSDEF);
-        QProblemB_setPrintLevel(QPB, PL_TABULAR);  // TODO(dimitris): other options?
-        QProblemB_printProperties(QPB);  // TODO(dimitris): what is this for?
+        QProblemB_setPrintLevel(QPB, PL_NONE);
 
         status = QProblemB_init(QPB, qpoases_data->H, qpoases_data->g, qpoases_data->lb,
             qpoases_data->ub, &nWSR, &cputime);
@@ -292,8 +290,7 @@ return_t stage_qp_qpoases_init(const tree_qp_in *qp_in, int idx, stage_qp_t solv
         QPB = NULL;
 
         QProblemCON(QP, nx+nu, nc, HST_POSDEF);
-        QProblem_setPrintLevel(QP, PL_TABULAR);  // TODO(dimitris): other options?
-        QProblem_printProperties(QP);  // TODO(dimitris): what is this for?
+        QProblem_setPrintLevel(QP, PL_NONE);
 
         status = QProblem_init(QP, qpoases_data->H, qpoases_data->g, qpoases_data->C, qpoases_data->lb,
             qpoases_data->ub,  qpoases_data->lc, qpoases_data->uc, &nWSR, &cputime);
@@ -355,14 +352,6 @@ static int QProblem_solve(const tree_qp_in *qp_in, int idx, treeqp_tdunes_worksp
     //     exit(1);
     // }
 
-    printf(
-        "[TREEQP] Stage %d | status=%d | "
-        "nWSR=%d | cpu=%.9e\n",
-        idx,
-        status,
-        nWSR,
-        cputime);
- 
     return status;
 }
 
